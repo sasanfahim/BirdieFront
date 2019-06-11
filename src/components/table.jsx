@@ -8,18 +8,7 @@ class Table extends Component {
   async componentDidMount() {
     const { data } = await http.get("/hello");
     const temp = [...data];
-    const patients = temp.map(d => {
-      //const s = { ...d };
-      d.payload = JSON.parse(d.payload);
-      d["payload_as_text"] = JSON.parse(d["payload_as_text"]);
-      const date = d.timestamp.slice(0, 10);
-      d.date = date;
-      const time = d.timestamp.slice(12, 16);
-      d.time = time;
-      return d;
-    });
-    const sorted = _.orderBy(patients, ["timestamp"], ["asc"]);
-
+    const sorted = this.modifyServerData(temp);
     this.setState({ patients: sorted });
   }
   columns = [
@@ -29,6 +18,20 @@ class Table extends Component {
     { path: "payload.task_schedule_note", label: "Task Schedule" },
     { path: "payload.task_definition_description", label: "Task Definition" }
   ];
+  modifyServerData = temp => {
+    const patients = temp.map(d => {
+      d.payload = JSON.parse(d.payload);
+      d["payload_as_text"] = JSON.parse(d["payload_as_text"]);
+      const date = d.timestamp.slice(0, 10);
+      d.date = date;
+      const time = d.timestamp.slice(12, 16);
+      d.time = time;
+      return d;
+    });
+    const sorted = _.orderBy(patients, ["timestamp"], ["asc"]);
+    return sorted;
+  };
+
   handleSearch = query => {
     this.setState({ searchQuery: query });
   };

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Table from "./table";
 import http from "../services/httpService";
-import server from "../services/serverData";
+import server from "../services/serverDataAdapter";
 class DataStorage extends Component {
   state = { patients: [], searchQuery: "" };
   async componentDidMount() {
@@ -15,7 +15,6 @@ class DataStorage extends Component {
   };
   render() {
     const { patients, searchQuery } = this.state;
-
     return (
       <Table
         patients={patients}

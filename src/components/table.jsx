@@ -1,16 +1,8 @@
 import React, { Component } from "react";
-import http from "../services/httpService";
 import _ from "lodash";
 import SearchBox from "./searchBox";
 
 class Table extends Component {
-  state = { patients: [], searchQuery: "" };
-  async componentDidMount() {
-    const { data } = await http.get("/hello");
-    const temp = [...data];
-    const sorted = this.modifyServerData(temp);
-    this.setState({ patients: sorted });
-  }
   columns = [
     { path: "date", label: "Date" },
     { path: "time", label: "Time" },
@@ -18,25 +10,9 @@ class Table extends Component {
     { path: "payload.task_schedule_note", label: "Task Schedule" },
     { path: "payload.task_definition_description", label: "Task Definition" }
   ];
-  modifyServerData = temp => {
-    const patients = temp.map(d => {
-      d.payload = JSON.parse(d.payload);
-      d["payload_as_text"] = JSON.parse(d["payload_as_text"]);
-      const date = d.timestamp.slice(0, 10);
-      d.date = date;
-      const time = d.timestamp.slice(12, 16);
-      d.time = time;
-      return d;
-    });
-    const sorted = _.orderBy(patients, ["timestamp"], ["asc"]);
-    return sorted;
-  };
 
-  handleSearch = query => {
-    this.setState({ searchQuery: query });
-  };
   render() {
-    const { patients, searchQuery } = this.state;
+    const { patients, searchQuery, query } = this.props;
     const columns = this.columns;
     let myPatient = patients;
 
@@ -46,7 +22,7 @@ class Table extends Component {
 
     return (
       <React.Fragment>
-        <SearchBox value={searchQuery} onChange={this.handleSearch} />
+        <SearchBox value={searchQuery} onChange={query} />
         <table className="table table-bordered">
           <thead className="thead-dark">
             <tr>

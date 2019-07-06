@@ -1,4 +1,4 @@
-Full Stack Software Engineer Test
+Full Stack Software Engineer Intern - Test
 Please follow this link https://github.com/birdiecare/birdie-test
 DB credentials are:
 ? Type: MySQL
